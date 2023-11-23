@@ -13,27 +13,30 @@ class snake_head:
         self.screen = screen
         self.x = x
         self.y = y
-        self.r = 100
+        self.r = 10
         self.min_speed = 10
         self.max_speed = 30
         self.r_curv = 100
-        self.vx = 2
-        self.vy = 0
+        self.vx = 0
+        self.vy = -2
         self.a_rad = 0.2
         self.ax = 0
         self.ay = 0
         self.color = (0, 0, 0)
         self.angle = 0
-        self.turning_left = True
-        self.turning_right = False
+        self.turning_left = False
+        self.turning_right = True
         
 
 
     def update_angle(self):
+        self.angle = 0
         if not self.vx==0:
             self.angle = math.atan(self.vy/self.vx)
-        else:
+        elif self.vy>0:
             self.angle = math.pi/2
+        else:
+            self.angle = -1*math.pi/2
         if self.vx<0:
             self.angle += math.pi
 
@@ -43,6 +46,9 @@ class snake_head:
         if self.turning_left:
             self.vx+=a_c*math.cos(self.angle + math.pi/2)
             self.vy+=a_c*math.sin(self.angle + math.pi/2)
+        if self.turning_right:
+            self.vx+=a_c*math.cos(self.angle - math.pi/2)
+            self.vy+=a_c*math.sin(self.angle - math.pi/2)
 
 
         if self.x + self.vx < self.r:
@@ -63,13 +69,14 @@ class snake_head:
         w = 50
         d =  math.sqrt((w/2)**2 + (h/4)**2)
         a_0 = math.atan(h/(2*w))
-        pygame.draw.polygon(self.screen, self.color, [[self.x + d*math.cos(-1*self.angle+a_0), self.x+d*math.sin(-1*self.angle+a_0)],
-                                                     [self.x + d*math.cos(-1*self.angle-a_0), self.x+d*math.sin(-1*self.angle-a_0)]
-                                                     [self.x - h/4 * math.cos(self.angle+math.pi/2), self.y - h/4 * math.sin(self.angle+math.pi/2)], 
-                                                      [self.x - h/2 * math.cos(self.angle+math.pi/2), self.y - h/2 * math.sin(self.angle+math.pi/2)],
-                                                      [self.x + w/2 * math.cos(self.angle), self.y + w/2 *math.sin(self.angle)],
-                                                      [self.x + h/2 * math.cos(self.angle+math.pi/2), self.y + h/2 * math.sin(self.angle+math.pi/2)],
-                                                      [self.x + h/4 * math.cos(self.angle+math.pi/2), self.y + h/4 * math.sin(self.angle+math.pi/2)]]
+        pygame.draw.polygon(self.screen, self.color, [[self.x + d*math.cos(-1*self.angle+a_0+math.pi), self.y+d*math.sin(-1*self.angle+a_0+math.pi)],
+                                                     [self.x + d*math.cos(-1*self.angle-a_0-math.pi), self.y+d*math.sin(-1*self.angle-a_0-math.pi)],
+                                                     [self.x - h/4 * math.sin(-1*self.angle), self.y + h/4 * math.cos(-1*self.angle)], 
+                                                      [self.x - h/2 * math.sin(-1*self.angle), self.y + h/2 * math.cos(-1*self.angle)],
+                                                      [self.x + w/2 * math.cos(-1*self.angle), self.y + w/2 * math.sin(-1*self.angle)],
+                                                      [self.x + h/2 * math.sin(-1*self.angle), self.y - h/2 * math.cos(-1*self.angle)],
+                                                      [self.x + h/4 * math.sin(-1*self.angle), self.y - h/4 * math.cos(-1*self.angle)]
+                                                      ]
 
         )
 
