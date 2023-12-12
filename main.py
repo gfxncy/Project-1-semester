@@ -4,6 +4,7 @@ import sys
 import random
 import math
 import ctypes
+import tanks
 
 pygame.init()
 
@@ -130,6 +131,10 @@ generate_level(level)
 
 make_perimetr()
 
+#добавление танков в игру
+tank_group = pygame.sprite.Group()
+AllTanks = [tanks.Tank(screen=screen, index=0, tankgroup=tank_group, spritegroup=all_sprites)]
+
 if __name__ == '__main__':
     screen.fill(pygame.Color('white'))
     time = 0
@@ -139,6 +144,8 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+        pygame.draw.polygon(screen, 'red', ((0, 0), (1000, 0), (1000, 1000), (0, 1000)))
         screen.fill(pygame.Color('white'))
         all_sprites.draw(screen)
         all_sprites.update()

@@ -1,27 +1,33 @@
 import random
-import pygame as pg
+import pygame
 import math
 
-class Tank:
-    def __init__(self, color, screen):
+import load_image
+class Tank(pygame.sprite.Sprite):
+    def __init__(self, screen, index, tankgroup, spritegroup):
+        super().__init__(tankgroup, spritegroup)
         self.angle = random.randrange(0, 360)
         self.angle_rad = self.angle * math.pi / 180
-        self.x = 0
-        self.y = 0
+        self.x = 500
+        self.y = 500
         self.width = 20 #половина ширины
         self.height = 20 #половина высоты
 
         self.screen = screen
-        self.color = color
-        self.alive = True
+        self.spritegroup = spritegroup
+        self.tankgroup = tankgroup
 
-    def draw(self):
-        #точки полигона
-        phi = self.angle_rad
-        w = self.width
-        h = self.height
-        p1 = (self.x + w * math.cos(phi) - h * math.sin(phi), self.y + w * math.sin(phi) + h * math.cos(phi))
-        p2 = (self.x - w * math.cos(phi) - h * math.sin(phi), self.y - w * math.sin(phi) + h * math.cos(phi))
-        p3 = (self.x - w * math.cos(phi) + h * math.sin(phi), self.y - w * math.sin(phi) - h * math.cos(phi))
-        p4 = (self.x + w * math.cos(phi) + h * math.sin(phi), self.y + w * math.sin(phi) - h * math.cos(phi))
-        pg.draw.polygon(self.screen, self.color, (p1, p2, p3, p4))
+        self.alive = True
+        self.index = index
+
+        if self.index == 0:
+            self.image = load_image.load_image('tank_red.png')
+            self.color = 'red'
+
+        self.rect = self.image.get_rect().move(self.x, self.y)
+
+    def transfer(self):
+        self.alive = True
+        self.angle = random.randrange(0, 360)
+        self.rect = self.image.get_rect().move(self.x, self.y)
+        self.spritegroup.add(self)
