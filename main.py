@@ -43,6 +43,12 @@ buttons_1 = {
     'rotate_clockwise': pygame.K_LEFT,
     'rotate_counterclockwise': pygame.K_RIGHT
 }
+buttons_2 = {
+    'forward': pygame.K_w,
+    'backward': pygame.K_s,
+    'rotate_clockwise': pygame.K_a,
+    'rotate_counterclockwise': pygame.K_d
+}
 
 borders = {'hor': horizontal_borders, 'ver': vertical_borders}
 
@@ -57,7 +63,19 @@ AllTanks = [tanks.Tank(
     backspeed=BACKSPEED,
     rotationspeed=ROTATIONSPEED,
     borders=borders
-)]
+    ),
+    tanks.Tank(
+        screen=screen,
+        index=1,
+        tankgroup=tank_group,
+        spritegroup=all_sprites,
+        buttons=buttons_2,
+        speed=TANKSPEED,
+        backspeed=BACKSPEED,
+        rotationspeed=ROTATIONSPEED,
+        borders=borders
+    )
+]
 
 if __name__ == '__main__':
 
