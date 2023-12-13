@@ -130,7 +130,6 @@ for i in range(len(color)): print(level[i])
 
 # превращаем их в спрайты
 generate_level(level)
-
 make_perimetr()
 
 # добавление танков в игру
@@ -142,6 +141,9 @@ buttons_1 = {
     'rotate_counterclockwise': pygame.K_RIGHT
 }
 
+borders = {'hor': horizontal_borders, 'ver': vertical_borders}
+print(borders)
+
 tank_group = pygame.sprite.Group()
 AllTanks = [tanks.Tank(
     screen=screen,
@@ -151,7 +153,8 @@ AllTanks = [tanks.Tank(
     buttons=buttons_1,
     speed=TANKSPEED,
     backspeed=BACKSPEED,
-    rotationspeed=ROTATIONSPEED
+    rotationspeed=ROTATIONSPEED,
+    borders=borders
 )]
 
 if __name__ == '__main__':
