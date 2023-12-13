@@ -6,8 +6,9 @@ import math
 import ctypes
 import tanks
 import level
-
+from music import music
 pygame.init()
+music()
 
 pygame.mixer.music.load("Music/track_0.mp3")
 pygame.mixer.music.load("Music/track_1.mp3")
