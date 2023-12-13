@@ -23,11 +23,15 @@ class Tank(pygame.sprite.Sprite):
         if self.index == 0:
             self.image = load_image.load_image('tank_red.png')
             self.color = 'red'
+        elif self.index == 1:
+            self.image = load_image.load_image('tank_green.png')
+            self.color = 'green'
 
         self.rect = self.image.get_rect().move(self.x, self.y)
 
     def transfer(self):
         self.alive = True
+
         self.angle = random.randrange(0, 360)
         self.rect = self.image.get_rect().move(self.x, self.y)
         self.spritegroup.add(self)
