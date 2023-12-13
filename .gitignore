@@ -33,3 +33,7 @@
 
 #virtual enviroment
 env/
+
+__pycache__/
+
+.idea/
