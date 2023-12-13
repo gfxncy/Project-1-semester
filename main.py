@@ -10,13 +10,6 @@ from music import music
 pygame.init()
 music()
 
-pygame.mixer.music.load("Music/track_0.mp3")
-pygame.mixer.music.load("Music/track_1.mp3")
-pygame.mixer.music.load("Music/track_2.mp3")
-pygame.mixer.music.load("Music/track_3.mp3")
-pygame.mixer.music.load("Music/track_2.mp3")
-pygame.mixer.music.play(0)
-
 
 BOARDSDENSITY = 1 / 2
 ROTATIONSPEED = 5
@@ -31,7 +24,7 @@ ROUNDS = 0
 FPS = 50
 BOOM = []
 MUZZLE_ELONGETION = 10
-size = width, height = 1920, 1080
+size = width, height = 1520, 780
 screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
 horizontal_borders = pygame.sprite.Group()
