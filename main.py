@@ -11,6 +11,8 @@ pygame.init()
 BOARDSDENSITY = 1 / 2
 ROTATIONSPEED = 5
 AIMINGROTATIONSPEED = 1
+TANKSPEED = 10
+BACKSPEED = 10
 BALLSPEED = 9
 N, M = 9, 6  # вертикальный и горизонтальные перекладинки)
 DISAPPEARTIME = 500
@@ -131,21 +133,48 @@ generate_level(level)
 
 make_perimetr()
 
-#добавление танков в игру
+# добавление танков в игру
+
+buttons_1 = {
+    'forward': pygame.K_UP,
+    'backward': pygame.K_DOWN,
+    'rotate_clockwise': pygame.K_LEFT,
+    'rotate_counterclockwise': pygame.K_RIGHT
+}
+
 tank_group = pygame.sprite.Group()
-AllTanks = [tanks.Tank(screen=screen, index=0, tankgroup=tank_group, spritegroup=all_sprites)]
+AllTanks = [tanks.Tank(
+    screen=screen,
+    index=0,
+    tankgroup=tank_group,
+    spritegroup=all_sprites,
+    buttons=buttons_1,
+    speed=TANKSPEED,
+    backspeed=BACKSPEED,
+    rotationspeed=ROTATIONSPEED
+)]
 
 if __name__ == '__main__':
+
+    # создание окна приложения
     screen.fill(pygame.Color('white'))
     time = 0
     clock = pygame.time.Clock()
     running = True
-    while running:  # главный игровой цикл
+
+    #главный игровой цикл
+    while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
-        pygame.draw.polygon(screen, 'red', ((0, 0), (1000, 0), (1000, 1000), (0, 1000)))
+        #движение танков
+        keys = pygame.key.get_pressed()
+        for i in AllTanks:
+            if i.alive:
+                i.move(keys)
+
+        #отрисовка объектов
         screen.fill(pygame.Color('white'))
         all_sprites.draw(screen)
         all_sprites.update()
