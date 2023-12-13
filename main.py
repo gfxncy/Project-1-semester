@@ -30,7 +30,6 @@ all_sprites = pygame.sprite.Group()
 horizontal_borders = pygame.sprite.Group()
 vertical_borders = pygame.sprite.Group()
 
-
 def IsCorrect(x, y):
     return 0 <= x <= width and 0 <= y <= height
 
