@@ -9,18 +9,23 @@ import level
 
 pygame.init()
 
+pygame.mixer.music.load("Music/track_0.mp3")
+pygame.mixer.music.load("Music/track_1.mp3")
+pygame.mixer.music.load("Music/track_2.mp3")
+pygame.mixer.music.load("Music/track_3.mp3")
+pygame.mixer.music.load("Music/track_2.mp3")
+pygame.mixer.music.play(0)
+
+
 BOARDSDENSITY = 1 / 2
 ROTATIONSPEED = 5
 AIMINGROTATIONSPEED = 1
 TANKSPEED = 10
 BACKSPEED = 10
-BALLSPEED = 9
 N, M = 9, 6  # вертикальный и горизонтальные перекладинки)
-DISAPPEARTIME = 500
-RADIUS = 6
 SAFETIME = 12
 BORDERWIDTH = 5
-BULLETS = 6
+BULLETS = {"amount": 6, "radius": 6, "speed": 9, "dissapeartime": 500}
 ROUNDS = 0
 FPS = 50
 BOOM = []
@@ -41,14 +46,21 @@ buttons_1 = {
     'forward': pygame.K_UP,
     'backward': pygame.K_DOWN,
     'rotate_clockwise': pygame.K_LEFT,
-    'rotate_counterclockwise': pygame.K_RIGHT
+    'rotate_counterclockwise': pygame.K_RIGHT,
+    'shoot': pygame.K_SPACE,
+    'aming': pygame.K_m
 }
 buttons_2 = {
     'forward': pygame.K_w,
     'backward': pygame.K_s,
     'rotate_clockwise': pygame.K_a,
-    'rotate_counterclockwise': pygame.K_d
+    'rotate_counterclockwise': pygame.K_d,
+    'shoot': pygame.K_q,
+    'aming': pygame.K_1
 }
+
+sounds1 = {"shoot": pygame.mixer.Sound('Music/nya.mp3')}
+sounds2 = {"shoot": pygame.mixer.Sound('Music/nya2.mp3')}
 
 borders = {'hor': horizontal_borders, 'ver': vertical_borders}
 
@@ -62,7 +74,9 @@ AllTanks = [tanks.Tank(
     speed=TANKSPEED,
     backspeed=BACKSPEED,
     rotationspeed=ROTATIONSPEED,
-    borders=borders
+    borders=borders,
+    sounds=sounds1,
+    bullets=BULLETS
     ),
     tanks.Tank(
         screen=screen,
@@ -73,7 +87,9 @@ AllTanks = [tanks.Tank(
         speed=TANKSPEED,
         backspeed=BACKSPEED,
         rotationspeed=ROTATIONSPEED,
-        borders=borders
+        borders=borders,
+        sounds=sounds2,
+        bullets=BULLETS
     )
 ]
 
@@ -90,6 +106,21 @@ if __name__ == '__main__':
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.KEYDOWN:
+                for i in range(len(AllTanks)):
+                    if AllTanks[i].alive:
+                        if event.key == AllTanks[i].buttons["shoot"]:
+                            AllTanks[i].shoot()
+                        if event.key == AllTanks[i].buttons["aming"]:
+                            AllTanks[i].aming = True
+                            pygame.mixer.music.pause()
+
+            if event.type == pygame.KEYUP:
+                for i in range(len(AllTanks)):
+                    if AllTanks[i].alive:
+                        if event.key == AllTanks[i].buttons["aming"]:
+                            AllTanks[i].aming = False
+                            pygame.mixer.music.unpause()
 
         #движение танков
         keys = pygame.key.get_pressed()

@@ -1,21 +1,25 @@
 import random
 import pygame
 import math
-
+from balls import Ball
 import load_image
+
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, screen, index, tankgroup, spritegroup, buttons, speed, backspeed, rotationspeed, borders):
+    def __init__(self, screen, index, tankgroup, spritegroup, buttons, speed, backspeed, rotationspeed, borders, sounds, bullets):
         super().__init__(tankgroup, spritegroup)
+        self.all_spirits = spritegroup
         self.angle = random.randrange(0, 360)
         self.angle_rad = self.angle * math.pi / 180
-
+        self.nya = sounds["shoot"]
         self.speed = speed
         self.backspeed = backspeed
         self.rotationspeed = rotationspeed
-
+        self.bullets = bullets
         self.screen = screen
         self.spritegroup = spritegroup
         self.tankgroup = tankgroup
+        self.Counter = [0]
+        self.die = 0
 
         self.alive = True
         self.index = index
@@ -129,3 +133,15 @@ class Tank(pygame.sprite.Sprite):
         self.angle = random.randrange(0, 360)
         self.rect = self.image.get_rect().move(100, 100) #fixme добавить рандом координаты
         self.spritegroup.add(self)
+
+    def shoot(self):
+        MUZZLE_ELONGETION = 10
+        if self.Counter[0] > self.bullets["amount"]:
+            return
+        vx = self.bullets["speed"] * math.cos(self.angle * math.pi / 180)
+        vy = - self.bullets["speed"] * math.sin(self.angle * math.pi / 180)
+        x = (self.image_0.get_height() + MUZZLE_ELONGETION) / 2 * math.cos(self.angle * math.pi / 180)
+        y = -(self.image_0.get_height() + MUZZLE_ELONGETION) / 2 * math.sin(self.angle * math.pi / 180)
+        self.Counter[0] += 1
+        Ball(self.bullets["radius"], self.rect.center[0] + x - self.bullets["radius"], self.rect.center[1] + y - self.bullets["radius"], vx, vy, self.Counter, spiritgroup=self.all_spirits, TIME=self.bullets["dissapeartime"])
+        self.nya.play()
