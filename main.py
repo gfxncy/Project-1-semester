@@ -7,6 +7,7 @@ import ctypes
 import tanks
 import level
 from music import music
+from balls import Balls
 pygame.init()
 music()
 
@@ -95,6 +96,13 @@ AllTanks = [
 for i in AllTanks:
     i.transfer()
 
+def LivesCounter(mas):
+    answer = 0
+    for i in range(len(mas)):
+        if mas[i].alive:
+            answer += 1
+    return answer
+
 if __name__ == '__main__':
 
     # создание окна приложения
@@ -130,10 +138,21 @@ if __name__ == '__main__':
             if i.alive:
                 i.move(keys)
 
+        #есть пробитие
+        if LivesCounter(AllTanks) < 2:
+            ROUNDS += 1
+            Balls.empty()
+            for i in AllTanks:
+                i.bullets = 0
+                i.transfer()
+
         #отрисовка объектов
         screen.fill(pygame.Color('white'))
         all_sprites.draw(screen)
         all_sprites.update()
+
+        if len(AllTanks) < 2:
+            print(len(AllTanks))
 
         clock.tick(FPS)
         pygame.display.flip()
