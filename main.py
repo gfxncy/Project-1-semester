@@ -59,18 +59,21 @@ sounds2 = {"shoot": pygame.mixer.Sound('Music/nya2.mp3')}
 borders = {'hor': horizontal_borders, 'ver': vertical_borders}
 
 tank_group = pygame.sprite.Group()
-AllTanks = [tanks.Tank(
-    screen=screen,
-    index=0,
-    tankgroup=tank_group,
-    spritegroup=all_sprites,
-    buttons=buttons_1,
-    speed=TANKSPEED,
-    backspeed=BACKSPEED,
-    rotationspeed=ROTATIONSPEED,
-    borders=borders,
-    sounds=sounds1,
-    bullets=BULLETS
+AllTanks = [
+    tanks.Tank(
+        screen=screen,
+        index=0,
+        tankgroup=tank_group,
+        spritegroup=all_sprites,
+        buttons=buttons_1,
+        speed=TANKSPEED,
+        backspeed=BACKSPEED,
+        rotationspeed=ROTATIONSPEED,
+        borders=borders,
+        sounds=sounds1,
+        bullets=BULLETS,
+        safetime=SAFETIME,
+        boom=BOOM
     ),
     tanks.Tank(
         screen=screen,
@@ -83,7 +86,9 @@ AllTanks = [tanks.Tank(
         rotationspeed=ROTATIONSPEED,
         borders=borders,
         sounds=sounds2,
-        bullets=BULLETS
+        bullets=BULLETS,
+        safetime=SAFETIME,
+        boom=BOOM
     )
 ]
 
