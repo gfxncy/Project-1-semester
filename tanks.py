@@ -105,22 +105,6 @@ class Tank(pygame.sprite.Sprite):
                 if x < 0:
                     x = 0
 
-        #столкновение со стеной:
-
-        if self.rect.x + x > self.screen.get_size()[0] - 100:
-            x = 0
-            self.rect.x = self.screen.get_size()[0] - 101
-        elif self.rect.x + x < 100:
-            x = 0
-            self.rect.x = 101
-
-        if self.rect.y + y < 40:
-            y = 0
-            self.rect.y = 41
-        elif self.rect.y + y > self.screen.get_size()[1] + 40:
-            y = 0
-            self.rect.y = self.screen.get_size()[1] - 41
-
         #обновление координат и картинок
         self.rect.x += round(x)
         self.rect.y += round(y)
