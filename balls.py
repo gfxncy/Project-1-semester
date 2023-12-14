@@ -30,7 +30,7 @@ class Ball(pygame.sprite.Sprite):
     def update(self):
         self.time += 1
         if self.time >= self.DieTime:
-            self.parent[0] -= 1
+            self.parent.Counter -= 1
             self.kill()
 
         coll1 = False

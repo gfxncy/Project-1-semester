@@ -2,10 +2,11 @@ import random
 import pygame
 import math
 from balls import Ball
+from balls import Balls
 import load_image
 
 class Tank(pygame.sprite.Sprite):
-    def __init__(self, screen, index, tankgroup, spritegroup, buttons, speed, backspeed, rotationspeed, borders, sounds, bullets):
+    def __init__(self, screen, index, tankgroup, spritegroup, buttons, speed, backspeed, rotationspeed, borders, sounds, bullets, safetime, boom):
         super().__init__(tankgroup, spritegroup)
         self.all_spirits = spritegroup
         self.angle = random.randrange(0, 360)
@@ -15,11 +16,17 @@ class Tank(pygame.sprite.Sprite):
         self.backspeed = backspeed
         self.rotationspeed = rotationspeed
         self.bullets = bullets
+        self.bullets_amount = self.bullets['amount']
+        self.bullets_speed = self.bullets['speed']
+        self.bulletr = self.bullets['radius']
+        self.bullets_dissapeartime = bullets['dissapeartime']
         self.screen = screen
         self.spritegroup = spritegroup
         self.tankgroup = tankgroup
-        self.Counter = [0]
-        self.die = 0
+        self.Counter = 0
+        self.dies = 0
+        self.safetime = safetime
+        self.BOOM = boom
 
         self.alive = True
         self.index = index
@@ -105,7 +112,6 @@ class Tank(pygame.sprite.Sprite):
                 if x < 0:
                     x = 0
 
-
         #обновление координат и картинок
         self.rect.x += round(x)
         self.rect.y += round(y)
@@ -114,19 +120,38 @@ class Tank(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
     def transfer(self):
         self.alive = True
+        self.Counter = 0
 
         self.angle = random.randrange(0, 360)
-        self.rect = self.image.get_rect().move(100, 100) #fixme добавить рандом координаты
+        self.rect = self.image.get_rect().move(random.randint(0, 1520), random.randint(0, 780)) #fixme добавить рандом координаты
         self.spritegroup.add(self)
 
     def shoot(self):
         MUZZLE_ELONGETION = 10
-        if self.Counter[0] > self.bullets["amount"]:
+        if self.Counter > self.bullets_amount:
             return
-        vx = self.bullets["speed"] * math.cos(self.angle * math.pi / 180)
-        vy = - self.bullets["speed"] * math.sin(self.angle * math.pi / 180)
+        vx = self.bullets_speed * math.cos(self.angle * math.pi / 180)
+        vy = - self.bullets_speed * math.sin(self.angle * math.pi / 180)
         x = (self.image_0.get_height() + MUZZLE_ELONGETION) / 2 * math.cos(self.angle * math.pi / 180)
         y = -(self.image_0.get_height() + MUZZLE_ELONGETION) / 2 * math.sin(self.angle * math.pi / 180)
-        self.Counter[0] += 1
-        Ball(self.bullets["radius"], self.rect.center[0] + x - self.bullets["radius"], self.rect.center[1] + y - self.bullets["radius"], vx, vy, self.Counter, spiritgroup=self.all_spirits, TIME=self.bullets["dissapeartime"])
+        self.Counter += 1
+        Ball(self.bulletr, self.rect.center[0] + x - self.bulletr, self.rect.center[1] + y - self.bulletr, vx, vy, parent=self, spiritgroup=self.all_spirits, TIME=self.bullets_dissapeartime)
         self.nya.play()
+
+    def update(self, *args, **kwargs):
+        for i in Balls:
+            offset = (i.rect.x - self.rect.x, i.rect.y - self.rect.y)
+            if self.mask.overlap_area(i.mask, offset) > 0:
+                if i.time > self.safetime and i.parent.index != self.index:
+                    i.kill()
+                    for t in self.BOOM:
+                        self.image = t
+                        self.screen.fill(pygame.Color('white'))
+                        self.all_spirits.draw(self.screen)
+                        pygame.display.flip()
+                        pygame.time.delay(100)
+                    pygame.time.delay(400)
+                    self.alive = False
+                    self.kill()
+                    self.dies += 1
+                    break

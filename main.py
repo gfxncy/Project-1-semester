@@ -7,6 +7,7 @@ import ctypes
 import tanks
 import level
 from music import music
+from balls import Balls
 pygame.init()
 music()
 
@@ -59,18 +60,21 @@ sounds2 = {"shoot": pygame.mixer.Sound('Music/nya2.mp3')}
 borders = {'hor': horizontal_borders, 'ver': vertical_borders}
 
 tank_group = pygame.sprite.Group()
-AllTanks = [tanks.Tank(
-    screen=screen,
-    index=0,
-    tankgroup=tank_group,
-    spritegroup=all_sprites,
-    buttons=buttons_1,
-    speed=TANKSPEED,
-    backspeed=BACKSPEED,
-    rotationspeed=ROTATIONSPEED,
-    borders=borders,
-    sounds=sounds1,
-    bullets=BULLETS
+AllTanks = [
+    tanks.Tank(
+        screen=screen,
+        index=0,
+        tankgroup=tank_group,
+        spritegroup=all_sprites,
+        buttons=buttons_1,
+        speed=TANKSPEED,
+        backspeed=BACKSPEED,
+        rotationspeed=ROTATIONSPEED,
+        borders=borders,
+        sounds=sounds1,
+        bullets=BULLETS,
+        safetime=SAFETIME,
+        boom=BOOM
     ),
     tanks.Tank(
         screen=screen,
@@ -83,9 +87,21 @@ AllTanks = [tanks.Tank(
         rotationspeed=ROTATIONSPEED,
         borders=borders,
         sounds=sounds2,
-        bullets=BULLETS
+        bullets=BULLETS,
+        safetime=SAFETIME,
+        boom=BOOM
     )
 ]
+
+for i in AllTanks:
+    i.transfer()
+
+def LivesCounter(mas):
+    answer = 0
+    for i in range(len(mas)):
+        if mas[i].alive:
+            answer += 1
+    return answer
 
 if __name__ == '__main__':
 
@@ -122,10 +138,21 @@ if __name__ == '__main__':
             if i.alive:
                 i.move(keys)
 
+        #есть пробитие
+        if LivesCounter(AllTanks) < 2:
+            ROUNDS += 1
+            Balls.empty()
+            for i in AllTanks:
+                i.bullets = 0
+                i.transfer()
+
         #отрисовка объектов
         screen.fill(pygame.Color('white'))
         all_sprites.draw(screen)
         all_sprites.update()
+
+        if len(AllTanks) < 2:
+            print(len(AllTanks))
 
         clock.tick(FPS)
         pygame.display.flip()
