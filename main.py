@@ -8,6 +8,7 @@ import tanks
 import level
 from music import music
 from balls import Balls
+import load_image
 pygame.init()
 music()
 
@@ -25,7 +26,7 @@ ROUNDS = 0
 FPS = 50
 BOOM = []
 MUZZLE_ELONGETION = 10
-size = width, height = 1520, 780
+size = width, height = 1920, 1080
 screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
 horizontal_borders = pygame.sprite.Group()
@@ -58,6 +59,10 @@ sounds1 = {"shoot": pygame.mixer.Sound('Music/nya.mp3')}
 sounds2 = {"shoot": pygame.mixer.Sound('Music/nya2.mp3')}
 
 borders = {'hor': horizontal_borders, 'ver': vertical_borders}
+
+
+for i in range(1, 6):
+    BOOM.append(load_image.load_image('explosionSmoke' + str(i) + '.png', -1))
 
 tank_group = pygame.sprite.Group()
 AllTanks = [
