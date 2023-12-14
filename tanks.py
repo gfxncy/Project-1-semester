@@ -118,7 +118,7 @@ class Tank(pygame.sprite.Sprite):
         self.alive = True
 
         self.angle = random.randrange(0, 360)
-        self.rect = self.image.get_rect().move(100, 100) #fixme добавить рандом координаты
+        self.rect = self.image.get_rect().move(random.randint(0, 1520), random.randint(0, 780)) #fixme добавить рандом координаты
         self.spritegroup.add(self)
 
     def shoot(self):

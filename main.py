@@ -92,6 +92,9 @@ AllTanks = [
     )
 ]
 
+for i in AllTanks:
+    i.transfer()
+
 if __name__ == '__main__':
 
     # создание окна приложения
